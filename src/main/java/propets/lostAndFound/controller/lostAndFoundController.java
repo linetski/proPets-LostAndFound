@@ -93,9 +93,8 @@ public class lostAndFoundController {
 	
 	@ResponseBody
 	@GetMapping("/getLostPets")
-	public  LostPet getLostPets() {
-		LostPet lostPet = new LostPet();
-		return lostPet;
+	public  List<LostPet> getLostPets() {
+		return lostService.getLostPets();
 	}
 	
 	@GetMapping("/produce")

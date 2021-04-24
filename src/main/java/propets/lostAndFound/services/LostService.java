@@ -1,6 +1,8 @@
 package propets.lostAndFound.services;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,5 +19,9 @@ public class LostService {
 	
 	public void saveLostPet(LostPet lostPet) {
 		lostPetRepository.save(lostPet);
+	}
+
+	public List<LostPet> getLostPets() {
+		return lostPetRepository.findAll();	
 	}
 }
