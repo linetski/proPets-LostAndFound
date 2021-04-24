@@ -70,6 +70,16 @@ public class lostAndFoundController {
 	
 	@PostMapping("/saveLostPet")
 	public  ResponseEntity<String> saveLostPet(@RequestBody LostPet lostPet) {
+		String tags = null;
+		try {
+			tags = immagaService.getTagsByUrlImage("");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		lostPet.setTags(tags);
+		lostService.saveLostPet(lostPet);
 		System.out.println(lostPet);
 		return ResponseEntity.ok("lostPet saved");
 	}

@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.ToString;
 
 @ToString
-@Document(collection = "lostPet")
+@Document(collection = "lostPets")
 public class LostPet {
 	
 	@Id
@@ -39,6 +39,8 @@ public class LostPet {
     private String date;
     
     private String phone;
+    
+    private String tags;
 
 	public String getId() {
 		return id;
@@ -134,6 +136,14 @@ public class LostPet {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 }
