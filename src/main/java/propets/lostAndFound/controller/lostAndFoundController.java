@@ -91,18 +91,16 @@ public class lostAndFoundController {
 	@GetMapping("/produce")
 	public String produce() {	
 		System.out.println("produce called");
-		try {
-			kafkaTemplate.send(TOPIC, "dog lost");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "hello";
+		/*
+		 * try { kafkaTemplate.send(TOPIC, "dog lost"); } catch (Exception e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
+		 */
+		return "produce called";
 	}
 	
-	@KafkaListener(topics = TOPIC, groupId = "foo")
-	public void consume(String message) {
-	    System.out.println("Received Message in group foo: " + message);
-	}
+	/*
+	 * @KafkaListener(topics = TOPIC, groupId = "foo") public void consume(String
+	 * message) { System.out.println("Received Message in group foo: " + message); }
+	 */
 	
 }
