@@ -90,6 +90,7 @@ public class lostAndFoundController {
 	
 	@GetMapping("/produce")
 	public String produce() {	
+		System.out.println("produce called");
 		try {
 			kafkaTemplate.send(TOPIC, "dog lost");
 		} catch (Exception e) {
