@@ -11,6 +11,5 @@ spring:
   profiles: heroku
 eureka:
   instance:
-    hostname: ${DOMAIN_NAME}
-    nonSecurePort: 80
+    instanceId: https://propets-lostandfoundservice.herokuapp.com/
   password: ${USER_PASSWORD:password}
