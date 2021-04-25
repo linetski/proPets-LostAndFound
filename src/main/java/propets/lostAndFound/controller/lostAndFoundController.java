@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ import propets.lostAndFound.services.ImmagaService;
 import propets.lostAndFound.services.LostService;
 
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class lostAndFoundController {
 	
