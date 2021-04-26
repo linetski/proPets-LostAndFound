@@ -7,11 +7,10 @@ eureka:
       nonSecurePort: 80
     hostname: ${DOMAIN_NAME}
   instance:
+      instanceId: ${DOMAIN_NAME}
       hostname: ${DOMAIN_NAME}
       nonSecurePort: 80
   password: ${USER_PASSWORD:password}
 security:
   user:
     password: ${eureka.password}
-
-  
