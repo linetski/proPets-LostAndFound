@@ -24,7 +24,7 @@ public class LostAndFoundApplication {
 	@Value("${DOMAIN_NAME}")
 	private String domainName;
 	
-	@Value("${EUREKA_URL}")
+	@Value("${eureka.client.serviceUrl.defaultZone}")
 	private String url;
 	
 	public static void main(String[] args) {
@@ -48,5 +48,6 @@ public class LostAndFoundApplication {
 	public void doSomethingAfterStartup() {
 	    System.out.println(domainName);
 	    System.out.println(url);
+	    
 	}
 }
