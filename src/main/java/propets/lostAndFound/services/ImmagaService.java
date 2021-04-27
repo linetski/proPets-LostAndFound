@@ -22,7 +22,7 @@ public class ImmagaService {
 		String endpoint_url = "https://api.imagga.com/v2/tags";
 		String image_url = "https://upload.wikimedia.org/wikipedia/commons/0/0d/BIR_Grupp-_6_DALMATINER%2C_Mellanm%C3%B6llan_Honey_Pie_%2824234227655%29.jpg";
 
-		imageUrl = image_url;
+		//imageUrl = image_url;
 		
 		String url = endpoint_url + "?image_url=" + imageUrl;
 		URL urlObject = new URL(url);
