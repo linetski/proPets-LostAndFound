@@ -71,9 +71,14 @@ public class lostAndFoundController {
 	
 	@PostMapping("/saveLostPet")
 	public  ResponseEntity<String> saveLostPet(@RequestBody LostPet lostPet) {
-		String tags = null;
+		StringBuilder tagsBuilder = new StringBuilder();
+		String tags = "";
 		try {
-			tags = immagaService.getTagsByUrlImage("");
+			for (String url : lostPet.getImageUrls()) {
+				tagsBuilder.append(immagaService.getTagsByUrlImage(url));
+				tagsBuilder.append(" ");
+			}
+			tags = tagsBuilder.toString();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
