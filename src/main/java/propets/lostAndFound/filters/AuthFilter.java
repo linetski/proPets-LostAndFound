@@ -41,6 +41,11 @@ public class AuthFilter extends OncePerRequestFilter{
 
 		logger.info("entered");
 		String token = (String) request.getHeader("Authorization");
+		if(token==null) {
+			logger.info("token = null ----- Unauthorized! return 401");
+			response.addHeader("401", "Unauthorized!");
+			return;
+		}
 		logger.info("token: " + token);
 
 	    HttpHeaders headers = new HttpHeaders();
