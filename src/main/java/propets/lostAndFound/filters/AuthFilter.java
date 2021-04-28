@@ -1,6 +1,7 @@
 package propets.lostAndFound.filters;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,7 +39,12 @@ public class AuthFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
+		// print all the headers
+	    Enumeration headerNames = request.getHeaderNames();
+	    while(headerNames.hasMoreElements()) {
+	        String headerName = (String)headerNames.nextElement();
+	        logger.info("header: " + headerName + ":" + request.getHeader(headerName));
+	    }
 		logger.info("entered");
 		String token = (String) request.getHeader("Authorization");
 		if(token==null) {
