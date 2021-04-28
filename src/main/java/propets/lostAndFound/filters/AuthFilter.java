@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.amazonaws.services.apigateway.model.Method;
+
 
 
 @Component
@@ -40,6 +42,10 @@ public class AuthFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		// print all the headers
+		if(request.getMethod().equals(HttpMethod.OPTIONS)){
+			filterChain.doFilter(request, response);
+			return;
+		}
 	    Enumeration headerNames = request.getHeaderNames();
 	    while(headerNames.hasMoreElements()) {
 	        String headerName = (String)headerNames.nextElement();
