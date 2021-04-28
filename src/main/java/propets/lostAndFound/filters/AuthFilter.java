@@ -16,6 +16,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -48,9 +49,11 @@ public class AuthFilter extends OncePerRequestFilter{
 		HttpEntity<String> requestObject = 
 			      new HttpEntity<String>(null, headers);
 	    
-		ResponseEntity<Boolean> responseEntity = 
-				restTemplate.exchange("http://propets-auth-service/api/auth/authenticate", HttpMethod.GET, requestObject, Boolean.class);
-
+		ResponseEntity<String> responseEntity = 
+				restTemplate.exchange("http://propets-auth-service/api/auth/authenticate", HttpMethod.GET, requestObject, String.class);
+		if(responseEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+			logger.info("response from auth: " + "unauthorized");
+		}
 		logger.info("response from auth: " + responseEntity.toString());
 		filterChain.doFilter(request, response);
 	}
