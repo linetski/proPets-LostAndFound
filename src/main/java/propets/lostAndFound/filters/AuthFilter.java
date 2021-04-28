@@ -42,6 +42,7 @@ public class AuthFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		// print all the headers
 		if(request.getMethod().equals(HttpMethod.OPTIONS)){
+			logger.info("http method options arrived");
 			filterChain.doFilter(request, response);
 			return;
 		}
