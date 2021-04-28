@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.amazonaws.services.apigateway.model.Method;
 
 
 
