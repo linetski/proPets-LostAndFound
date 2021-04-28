@@ -49,7 +49,7 @@ public class AuthFilter extends OncePerRequestFilter{
 			      new HttpEntity<String>(null, headers);
 	    
 		ResponseEntity<Boolean> responseEntity = 
-				restTemplate.exchange("http://propets-auth-service/auth/authenticate", HttpMethod.GET, requestObject, Boolean.class);
+				restTemplate.exchange("http://propets-auth-service/api/auth/authenticate", HttpMethod.GET, requestObject, Boolean.class);
 
 		logger.info("response from auth: " + responseEntity.toString());
 		filterChain.doFilter(request, response);
