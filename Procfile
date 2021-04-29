@@ -1,1 +1,1 @@
-web:java -agentlib:jdwp=transport=dt_socket,server=y,address=9090,suspend=n -jar target/lostAndFound-0.0.1.jar
+web: java -agentlib:jdwp=transport=dt_socket,server=y,address=9090,suspend=n -jar target/lostAndFound-0.0.1.jar
