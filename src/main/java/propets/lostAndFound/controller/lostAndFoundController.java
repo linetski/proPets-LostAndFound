@@ -2,6 +2,8 @@ package propets.lostAndFound.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import propets.lostAndFound.filters.AuthFilter;
 import propets.lostAndFound.mongodb.model.FoundPet;
 import propets.lostAndFound.mongodb.model.LostPet;
 import propets.lostAndFound.services.FoundService;
@@ -26,6 +29,8 @@ import propets.lostAndFound.services.LostService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class lostAndFoundController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(lostAndFoundController.class);
 	
 	private static final String TOPIC = "lostAnimal";
 	
@@ -55,17 +60,22 @@ public class lostAndFoundController {
 		
 	@PostMapping("/saveFoundPet")
 	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet) {
-		String tags = null;
+		StringBuilder tagsBuilder = new StringBuilder();
+		String tags = "";
 		try {
-			tags = immagaService.getTagsByUrlImage("");
+			for (String url : foundPet.getImageUrls()) {
+				tagsBuilder.append(immagaService.getTagsByUrlImage(url));
+				tagsBuilder.append(" ");
+			}
+			tags = tagsBuilder.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("error occured in saveFoundAnimal", e);
 		}
 	
 		foundPet.setTags(tags);
 		foundService.saveFoundPet(foundPet);
-		System.out.println(foundPet);
+		logger.info("found pet saved: " + foundPet);
 		return ResponseEntity.ok("foundPet saved");
 	}
 	
@@ -80,8 +90,8 @@ public class lostAndFoundController {
 			}
 			tags = tagsBuilder.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("error occured in saveLostAnimal", e);
 		}
 	
 		lostPet.setTags(tags);
