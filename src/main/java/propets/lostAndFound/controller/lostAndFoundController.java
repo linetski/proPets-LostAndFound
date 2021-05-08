@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import propets.lostAndFound.filters.AuthFilter;
-import propets.lostAndFound.mongodb.model.FoundPet;
-import propets.lostAndFound.mongodb.model.LostPet;
 import propets.lostAndFound.services.FoundService;
 import propets.lostAndFound.services.ImmagaService;
 import propets.lostAndFound.services.LostService;
+import propets.model.FoundPet;
+import propets.model.LostPet;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -116,12 +116,13 @@ public class lostAndFoundController {
 	}
 	
 	@GetMapping("/produce")
-	public String produce() {	
+	public String produce(@RequestBody LostPet lostPet) {	
 		System.out.println("produce called");
-		/*
-		 * try { kafkaTemplate.send(TOPIC, "dog lost"); } catch (Exception e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
+		try { 
+			kafkaTemplate.send(LOST_PET_TOPIC, lostPet); 
+		} catch (Exception e) { // TODO
+			e.printStackTrace(); 
+		}
 		return "produce called";
 	}
 	

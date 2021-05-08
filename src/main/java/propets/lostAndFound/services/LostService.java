@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import propets.lostAndFound.mongodb.lostAnimalRepository.LostPetRepository;
-import propets.lostAndFound.mongodb.model.LostPet;
+import propets.model.LostPet;
 
 @Service
 public class LostService {

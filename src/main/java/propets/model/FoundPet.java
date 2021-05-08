@@ -1,4 +1,4 @@
-package propets.lostAndFound.mongodb.model;
+package propets.model;
 
 
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.ToString;
 
 @ToString
-@Document(collection = "lostPets")
-public class LostPet {
+@Document(collection = "foundPets")
+public class FoundPet {
 	
 	@Id
     public String id;
@@ -41,7 +41,7 @@ public class LostPet {
     private String phone;
     
     private String tags;
-
+    
 	public String getId() {
 		return id;
 	}
@@ -145,5 +145,6 @@ public class LostPet {
 	public void setTags(String tags) {
 		this.tags = tags;
 	}
+
 
 }

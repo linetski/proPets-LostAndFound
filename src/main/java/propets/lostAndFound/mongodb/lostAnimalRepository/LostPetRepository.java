@@ -2,7 +2,7 @@ package propets.lostAndFound.mongodb.lostAnimalRepository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import propets.lostAndFound.mongodb.model.LostPet;
+import propets.model.LostPet;
 
 
 
