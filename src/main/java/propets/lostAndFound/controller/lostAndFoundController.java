@@ -32,7 +32,8 @@ public class lostAndFoundController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(lostAndFoundController.class);
 	
-	private static final String TOPIC = "lostAnimal";
+	private static final String LOST_PET_TOPIC = "lostpet";
+	private static final String FOUND_PET_TOPIC = "foundpet";
 	
 	@Autowired
 	LostService lostService;
@@ -44,7 +45,7 @@ public class lostAndFoundController {
 	ImmagaService immagaService;
 	
 	@Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, LostPet> kafkaTemplate;
 	
 	@PostMapping("/upload")
 	  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -96,7 +97,8 @@ public class lostAndFoundController {
 	
 		lostPet.setTags(tags);
 		lostService.saveLostPet(lostPet);
-		System.out.println(lostPet);
+		kafkaTemplate.send(LOST_PET_TOPIC,lostPet);
+		logger.info(lostPet.toString());
 		return ResponseEntity.ok("lostPet saved");
 	}
 	
