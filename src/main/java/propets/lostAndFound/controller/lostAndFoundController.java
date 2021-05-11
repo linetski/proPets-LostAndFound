@@ -126,6 +126,12 @@ public class lostAndFoundController {
 		return "produce called";
 	}
 	
+	@GetMapping("/clearLostPets")
+	public String clearLostPets() {	
+		lostService.removeAll();
+		return "removedAll";
+	}
+	
 	/*
 	 * @KafkaListener(topics = TOPIC, groupId = "foo") public void consume(String
 	 * message) { System.out.println("Received Message in group foo: " + message); }

@@ -24,4 +24,8 @@ public class LostService {
 	public List<LostPet> getLostPets() {
 		return lostPetRepository.findAll();	
 	}
+	
+	public void removeAll() {
+		lostPetRepository.deleteAll();
+	}
 }

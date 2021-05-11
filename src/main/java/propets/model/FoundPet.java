@@ -40,6 +40,8 @@ public class FoundPet {
     
     private String phone;
     
+    private String breed;
+    
     private String tags;
     
 	public String getId() {
@@ -144,6 +146,14 @@ public class FoundPet {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public String getBreed() {
+		return breed;
+	}
+
+	public void setBreed(String breed) {
+		this.breed = breed;
 	}
 
 
