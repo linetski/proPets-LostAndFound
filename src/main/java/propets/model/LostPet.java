@@ -25,9 +25,7 @@ public class LostPet {
     private String color;
     
     private String sex;
-    
-    private String height;
-    
+
     private String distinction;
     
     private String description;
@@ -43,6 +41,8 @@ public class LostPet {
     private String breed;
     
     private String tags;
+    
+    private String email;
 
 	public String getId() {
 		return id;
@@ -82,14 +82,6 @@ public class LostPet {
 
 	public void setSex(String sex) {
 		this.sex = sex;
-	}
-
-	public String getHeight() {
-		return height;
-	}
-
-	public void setHeight(String height) {
-		this.height = height;
 	}
 
 	public String getDistinction() {
@@ -154,6 +146,14 @@ public class LostPet {
 
 	public void setBreed(String breed) {
 		this.breed = breed;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }

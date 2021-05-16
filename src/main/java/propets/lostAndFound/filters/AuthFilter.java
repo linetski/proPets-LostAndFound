@@ -74,6 +74,7 @@ public class AuthFilter extends OncePerRequestFilter{
 			return;
 		}
 		logger.info("response from auth: " + responseEntity.toString());
+		request.getSession().setAttribute("email", responseEntity.toString());
 		filterChain.doFilter(request, response);
 	}
 

@@ -2,6 +2,8 @@ package propets.lostAndFound.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.netflix.client.http.HttpRequest;
 
 import propets.lostAndFound.filters.AuthFilter;
 import propets.lostAndFound.services.FoundService;
@@ -45,7 +49,11 @@ public class lostAndFoundController {
 	ImmagaService immagaService;
 	
 	@Autowired
-    private KafkaTemplate<String, LostPet> kafkaTemplate;
+    private KafkaTemplate<String, LostPet> lostPetkafkaTemplate;
+	
+	@Autowired
+    private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
+
 	
 	@PostMapping("/upload")
 	  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -60,7 +68,7 @@ public class lostAndFoundController {
 	  }
 		
 	@PostMapping("/saveFoundPet")
-	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet) {
+	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet,HttpServletRequest req) {
 		StringBuilder tagsBuilder = new StringBuilder();
 		String tags = "";
 		try {
@@ -75,13 +83,16 @@ public class lostAndFoundController {
 		}
 	
 		foundPet.setTags(tags);
+		foundPet.setEmail((String)req.getAttribute("email"));
+		
 		foundService.saveFoundPet(foundPet);
+		foundPetkafkaTemplate.send(FOUND_PET_TOPIC,foundPet);
 		logger.info("found pet saved: " + foundPet);
 		return ResponseEntity.ok("foundPet saved");
 	}
 	
 	@PostMapping("/saveLostPet")
-	public  ResponseEntity<String> saveLostPet(@RequestBody LostPet lostPet) {
+	public  ResponseEntity<String> saveLostPet(@RequestBody LostPet lostPet,HttpServletRequest req) {
 		StringBuilder tagsBuilder = new StringBuilder();
 		String tags = "";
 		try {
@@ -96,8 +107,9 @@ public class lostAndFoundController {
 		}
 	
 		lostPet.setTags(tags);
+		lostPet.setEmail((String)req.getAttribute("email"));
 		lostService.saveLostPet(lostPet);
-		kafkaTemplate.send(LOST_PET_TOPIC,lostPet);
+		lostPetkafkaTemplate.send(LOST_PET_TOPIC,lostPet);
 		logger.info(lostPet.toString());
 		return ResponseEntity.ok("lostPet saved");
 	}
@@ -119,7 +131,7 @@ public class lostAndFoundController {
 	public String produce(@RequestBody LostPet lostPet) {	
 		System.out.println("produce called");
 		try { 
-			kafkaTemplate.send(LOST_PET_TOPIC, lostPet); 
+			lostPetkafkaTemplate.send(LOST_PET_TOPIC, lostPet); 
 		} catch (Exception e) { // TODO
 			e.printStackTrace(); 
 		}
