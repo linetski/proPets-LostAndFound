@@ -73,8 +73,8 @@ public class AuthFilter extends OncePerRequestFilter{
 			response.addHeader("401", "Unauthorized!");
 			return;
 		}
-		logger.info("response from auth: " + responseEntity.toString());
-		request.getSession().setAttribute("email", responseEntity.toString());
+		logger.info("response from auth: " + responseEntity.getBody());
+		request.getSession().setAttribute("email", responseEntity.getBody());
 		filterChain.doFilter(request, response);
 	}
 
