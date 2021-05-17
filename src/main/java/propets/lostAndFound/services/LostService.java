@@ -2,6 +2,7 @@ package propets.lostAndFound.services;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,5 +28,9 @@ public class LostService {
 	
 	public void removeAll() {
 		lostPetRepository.deleteAll();
+	}
+
+	public Optional<LostPet> getLostPetById(String id) {
+		return lostPetRepository.findById(id);
 	}
 }

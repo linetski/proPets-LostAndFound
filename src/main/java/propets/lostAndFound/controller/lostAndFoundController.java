@@ -1,6 +1,7 @@
 package propets.lostAndFound.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -129,6 +131,18 @@ public class lostAndFoundController {
 		return lostService.getLostPets();
 	}
 	
+	@ResponseBody
+	@GetMapping("/getLostPetById/{id}")
+	public  Optional<LostPet> getLostPetById(@PathVariable("id") String id) {
+		return lostService.getLostPetById(id);
+	}
+	
+	@ResponseBody
+	@GetMapping("/getFoundPetById/{id}")
+	public  Optional<FoundPet> getFoundPetById(@PathVariable("id") String id) {
+		return foundService.getFoundPetById(id);
+	}
+	
 	@GetMapping("/produce")
 	public String produce(@RequestBody LostPet lostPet) {	
 		System.out.println("produce called");
@@ -143,6 +157,12 @@ public class lostAndFoundController {
 	@GetMapping("/clearLostPets")
 	public String clearLostPets() {	
 		lostService.removeAll();
+		return "removedAll";
+	}
+	
+	@GetMapping("/clearFoundPets")
+	public String clearFoundPets() {	
+		foundService.removeAll();
 		return "removedAll";
 	}
 	
