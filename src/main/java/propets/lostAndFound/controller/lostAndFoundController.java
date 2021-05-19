@@ -85,7 +85,7 @@ public class lostAndFoundController {
 		}
 	
 		foundPet.setTags(tags);
-		foundPet.setEmail((String)req.getAttribute("email"));
+		foundPet.setEmail((String)req.getSession().getAttribute("email"));
 		
 		foundService.saveFoundPet(foundPet);
 		foundPetkafkaTemplate.send(FOUND_PET_TOPIC,foundPet);
