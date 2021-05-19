@@ -131,7 +131,7 @@ public class lostAndFoundController {
 	}
 	
 	@ResponseBody
-	@GetMapping("[")
+	@GetMapping("/getLostPetById/{id}")
 	public  Optional<LostPet> getLostPetById(@PathVariable("id") String id) {
 		return lostService.getLostPetById(id);
 	}
