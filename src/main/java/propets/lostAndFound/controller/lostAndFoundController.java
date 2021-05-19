@@ -120,9 +120,8 @@ public class lostAndFoundController {
 	
 	@ResponseBody
 	@GetMapping("/getFoundPets")
-	public  FoundPet getFoundPets() {
-		FoundPet foundPet = new FoundPet();
-		return foundPet;
+	public  List<FoundPet> getFoundPets() {
+		return foundService.getFoundPets();
 	}
 	
 	@ResponseBody
@@ -132,7 +131,7 @@ public class lostAndFoundController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/getLostPetById/{id}")
+	@GetMapping("[")
 	public  Optional<LostPet> getLostPetById(@PathVariable("id") String id) {
 		return lostService.getLostPetById(id);
 	}
