@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashSet;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,7 @@ public class ImmagaService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ImmagaService.class);
 	
-	public String getTagsByUrlImage(String imageUrl) throws Exception{
+	public HashSet<String> getTagsByUrlImage(String imageUrl) throws Exception{
 		String credentialsToEncode = apiKey + ":" + APISecret;
 		String basicAuth = Base64.getEncoder().encodeToString(credentialsToEncode.getBytes(StandardCharsets.UTF_8));
 
@@ -50,20 +52,20 @@ public class ImmagaService {
 
 		String jsonResponse = connectionInput.readLine();
 		StringBuilder responseTags = new StringBuilder();
+		HashSet<String> set = new HashSet<String>();
 		ObjectMapper om = new ObjectMapper();
 		om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ImmagaResponse immagaResponse = om.readerFor(ImmagaResponse.class).readValue(jsonResponse);
 		for (ImmagaTagWithConfidence immagaTagWithConfidence : immagaResponse.getResult().getTags()) {
 			if (immagaTagWithConfidence.getConfidence()>20) {
-				responseTags.append(immagaTagWithConfidence.getTag().getEn());
-				responseTags.append(" ");				
+				set.add(immagaTagWithConfidence.getTag().getEn());				
 			}
 		}
 		
 		connectionInput.close();
 		
 		logger.info(responseTags.toString());
-		return responseTags.toString().trim();
+		return set;
 	}
 
 }

@@ -1,5 +1,6 @@
 package propets.lostAndFound.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,9 +74,14 @@ public class lostAndFoundController {
 	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet,HttpServletRequest req) {
 		StringBuilder tagsBuilder = new StringBuilder();
 		String tags = "";
+		HashSet<String> set = new HashSet<String>();
 		try {
-			for (String url : foundPet.getImageUrls()) {
-				tagsBuilder.append(immagaService.getTagsByUrlImage(url));
+			for(String url : foundPet.getImageUrls()) {
+				set.addAll(immagaService.getTagsByUrlImage(url));
+			}
+			
+			for (String tag : set) {
+				tagsBuilder.append(tag);
 				tagsBuilder.append(" ");
 			}
 			tags = tagsBuilder.toString();
@@ -97,9 +103,16 @@ public class lostAndFoundController {
 	public  ResponseEntity<String> saveLostPet(@RequestBody LostPet lostPet,HttpServletRequest req) {
 		StringBuilder tagsBuilder = new StringBuilder();
 		String tags = "";
+		HashSet<String> set = new HashSet<String>();
+		
+		
 		try {
-			for (String url : lostPet.getImageUrls()) {
-				tagsBuilder.append(immagaService.getTagsByUrlImage(url));
+			for(String url : lostPet.getImageUrls()) {
+				set.addAll(immagaService.getTagsByUrlImage(url));
+			}
+			
+			for (String tag : set) {
+				tagsBuilder.append(tag);
 				tagsBuilder.append(" ");
 			}
 			tags = tagsBuilder.toString();
