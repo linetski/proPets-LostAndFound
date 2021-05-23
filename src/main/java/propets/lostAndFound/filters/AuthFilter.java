@@ -69,12 +69,16 @@ public class AuthFilter extends OncePerRequestFilter{
 	    
 		ResponseEntity<String> responseEntity = 
 				restTemplate.exchange("http://propets-auth-service/api/auth/authenticate", HttpMethod.GET, requestObject, String.class);
-		if(responseEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+		ResponseEntity<String> profileNameEntity = 
+				restTemplate.exchange("http://propets-auth-service/api/auth/getProfileName", HttpMethod.GET, requestObject, String.class);
+		if(responseEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED) || profileNameEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
 			response.addHeader("401", "Unauthorized!");
 			return;
 		}
 		logger.info("response from auth: " + responseEntity.getBody());
+		logger.info("response from getProfileName: " + profileNameEntity.getBody());
 		request.getSession().setAttribute("email", responseEntity.getBody());
+		request.getSession().setAttribute("profileName", profileNameEntity.getBody());
 		filterChain.doFilter(request, response);
 	}
 

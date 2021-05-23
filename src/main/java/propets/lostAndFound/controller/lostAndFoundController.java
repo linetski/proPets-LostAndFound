@@ -1,5 +1,6 @@
 package propets.lostAndFound.controller;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +30,10 @@ import propets.lostAndFound.filters.AuthFilter;
 import propets.lostAndFound.services.FoundService;
 import propets.lostAndFound.services.ImmagaService;
 import propets.lostAndFound.services.LostService;
+import propets.lostAndFound.services.PostService;
 import propets.model.FoundPet;
 import propets.model.LostPet;
+import propets.model.Post;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -49,6 +52,9 @@ public class lostAndFoundController {
 	FoundService foundService;
 	
 	@Autowired
+	PostService postService;
+	
+	@Autowired
 	ImmagaService immagaService;
 	
 	@Autowired
@@ -56,6 +62,10 @@ public class lostAndFoundController {
 	
 	@Autowired
     private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
+
+	private PostService postService2;
+
+	private PostService postService3;
 
 	
 	@PostMapping("/upload")
@@ -153,6 +163,21 @@ public class lostAndFoundController {
 	@GetMapping("/getFoundPetById/{id}")
 	public  Optional<FoundPet> getFoundPetById(@PathVariable("id") String id) {
 		return foundService.getFoundPetById(id);
+	}
+	
+	@ResponseBody
+	@GetMapping("/getPosts/{type}")
+	public  List<Post> getPosts(@PathVariable("type") String type) {
+		return postService.getPostByType(type);
+	}
+	
+	@PostMapping("/savePost")
+	public  ResponseEntity<String> savePost(@RequestBody Post post, HttpServletRequest req) {
+		post.setDate(new Date());
+		String profileName =(String) req.getSession().getAttribute("profileName");
+		post.setProfileName(profileName);
+		postService.savePost(post);
+		return ResponseEntity.ok("post saved");
 	}
 	
 	@GetMapping("/produce")
