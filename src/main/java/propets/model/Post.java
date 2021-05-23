@@ -19,15 +19,12 @@ import lombok.ToString;
 @Document(collection = "posts")
 public class Post {
 	
-	public static final String HOTEL_TYPE = "hotel";
-	public static final String HOME_TYPE = "home";
-	public static final String CARE_TYPE = "care";
-	
 	@Id
 	private String id;
 	private List<String> imageUrls = new ArrayList<String>();
 	private String type;
 	private Date date;
-	private String profileName;
+	private String nameProfile;
+	private String text;
 
 }
