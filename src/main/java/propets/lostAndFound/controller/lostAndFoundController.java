@@ -201,7 +201,7 @@ public class lostAndFoundController {
 	public  ResponseEntity<String> savePost(@RequestBody Post post, HttpServletRequest req) {
 		post.setDate(new Date());
 		String profileName =(String) req.getSession().getAttribute("profileName");
-		post.setProfileName(profileName);
+		post.setNameProfile(profileName);
 		postService.savePost(post);
 		return ResponseEntity.ok("post saved");
 	}
