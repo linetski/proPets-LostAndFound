@@ -1,9 +1,11 @@
 package propets.lostAndFound.controller;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.netflix.client.http.HttpRequest;
 
 import propets.lostAndFound.filters.AuthFilter;
+import propets.lostAndFound.services.FavoritePostService;
 import propets.lostAndFound.services.FoundService;
 import propets.lostAndFound.services.ImmagaService;
 import propets.lostAndFound.services.LostService;
 import propets.lostAndFound.services.PostService;
+import propets.model.FavoritePost;
 import propets.model.FoundPet;
 import propets.model.LostPet;
 import propets.model.Post;
@@ -53,6 +58,9 @@ public class lostAndFoundController {
 	
 	@Autowired
 	PostService postService;
+	
+	@Autowired
+	FavoritePostService favoritePostService;
 	
 	@Autowired
 	ImmagaService immagaService;
@@ -169,6 +177,24 @@ public class lostAndFoundController {
 	@GetMapping("/getPosts/{type}")
 	public  List<Post> getPosts(@PathVariable("type") String type) {
 		return postService.getPostByType(type);
+	}
+	
+	@ResponseBody
+	@GetMapping("/getFavorites")
+	public  List<FavoritePost> getFavorites(HttpServletRequest req) {
+		String email =(String) req.getSession().getAttribute("email");
+		List<FavoritePost> list = favoritePostService.getFavoritePostByEmail(email);
+		/*
+		 * List<Post> favoritePosts = list.stream() .map(favoritePost ->
+		 * favoritePost.getPost()) .collect(Collectors.toList());
+		 */
+		
+		return list;
+	}
+	
+	@DeleteMapping("/favorites/{id}")
+	void deleteEmployee(@PathVariable String id) {
+		favoritePostService.deleteById(id);
 	}
 	
 	@PostMapping("/savePost")
