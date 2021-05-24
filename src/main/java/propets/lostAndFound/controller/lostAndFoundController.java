@@ -193,8 +193,17 @@ public class lostAndFoundController {
 	}
 	
 	@DeleteMapping("/favorites/{id}")
-	void deleteEmployee(@PathVariable String id) {
+	void deleteFavoriteById(@PathVariable String id) {
 		favoritePostService.deleteById(id);
+	}
+	
+	@PostMapping("/saveFavoritePost")
+	public  ResponseEntity<String> saveFavoritePost(@RequestBody FavoritePost favoritePost, HttpServletRequest req) {
+		String profileName =(String) req.getSession().getAttribute("profileName");
+		String email =(String) req.getSession().getAttribute("email");
+		favoritePost.setEmail(email);
+		favoritePostService.saveFavoritePost(favoritePost);
+		return ResponseEntity.ok("post saved");
 	}
 	
 	@PostMapping("/savePost")
