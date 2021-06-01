@@ -156,8 +156,28 @@ public class lostAndFoundController {
 	}
 	
 	@ResponseBody
+	@GetMapping("/importFoundPetsToElastic")
+	public  List<FoundPet> importFoundPetsToElastic() {
+		List<FoundPet> list = foundService.getFoundPets();
+		for(FoundPet pet: list) {
+			foundPetkafkaTemplate.send(FOUND_PET_TOPIC,pet);
+		}
+		return foundService.getFoundPets();
+	}
+	
+	@ResponseBody
 	@GetMapping("/getLostPets")
 	public  List<LostPet> getLostPets() {
+		return lostService.getLostPets();
+	}
+	
+	@ResponseBody
+	@GetMapping("/importLostPetsToElastic")
+	public  List<LostPet> importLostPetsToElastic() {
+		List<LostPet> list = lostService.getLostPets();
+		for(LostPet pet: list) {
+			lostPetkafkaTemplate.send(LOST_PET_TOPIC,pet);
+		}
 		return lostService.getLostPets();
 	}
 	
