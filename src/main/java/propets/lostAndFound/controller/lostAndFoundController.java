@@ -218,12 +218,12 @@ public class lostAndFoundController {
 	}
 	
 	@PostMapping("/saveFavoritePost")
-	public  ResponseEntity<String> saveFavoritePost(@RequestBody FavoritePost favoritePost, HttpServletRequest req) {
+	public  ResponseEntity<FavoritePost> saveFavoritePost(@RequestBody FavoritePost favoritePost, HttpServletRequest req) {
 		String profileName =(String) req.getSession().getAttribute("profileName");
 		String email =(String) req.getSession().getAttribute("email");
 		favoritePost.setEmail(email);
-		favoritePostService.saveFavoritePost(favoritePost);
-		return ResponseEntity.ok("post saved");
+		favoritePost = favoritePostService.saveFavoritePost(favoritePost);
+		return ResponseEntity.ok(favoritePost);
 	}
 	
 	@PostMapping("/savePost")

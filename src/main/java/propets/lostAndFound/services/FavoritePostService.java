@@ -17,8 +17,8 @@ public class FavoritePostService {
 	@Autowired
 	FavoritePostRepository favoritePostRepository;
 	
-	public void saveFavoritePost(FavoritePost favoritePost) {
-		favoritePostRepository.save(favoritePost);
+	public FavoritePost saveFavoritePost(FavoritePost favoritePost) {
+		return favoritePostRepository.save(favoritePost);
 	}
 
 	public List<FavoritePost> getFavoritePosts() {
