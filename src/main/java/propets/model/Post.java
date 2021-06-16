@@ -1,5 +1,6 @@
 package propets.model;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ public class Post {
 	private String id;
 	private List<String> imageUrls = new ArrayList<String>();
 	private String type;
-	private Date date;
+	private ZonedDateTime date;
 	private String nameProfile;
 	private String text;
 

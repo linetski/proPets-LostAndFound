@@ -1,5 +1,6 @@
 package propets.lostAndFound.controller;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -228,7 +229,7 @@ public class lostAndFoundController {
 	
 	@PostMapping("/savePost")
 	public  ResponseEntity<String> savePost(@RequestBody Post post, HttpServletRequest req) {
-		post.setDate(new Date());
+		post.setDate(ZonedDateTime.now());
 		String profileName =(String) req.getSession().getAttribute("profileName");
 		post.setNameProfile(profileName);
 		postService.savePost(post);
