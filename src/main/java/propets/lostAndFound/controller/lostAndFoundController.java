@@ -72,10 +72,6 @@ public class lostAndFoundController {
 	@Autowired
     private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
 
-	private PostService postService2;
-
-	private PostService postService3;
-
 	
 	@PostMapping("/upload")
 	  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
