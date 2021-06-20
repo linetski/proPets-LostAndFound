@@ -71,19 +71,6 @@ public class lostAndFoundController {
 	
 	@Autowired
     private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
-
-	
-	@PostMapping("/upload")
-	  public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-	    String message = "";
-	    try {
-	      message = "Uploaded the file successfully: " + file.getOriginalFilename();
-	      return ResponseEntity.status(HttpStatus.OK).body(message);
-	    } catch (Exception e) {
-	      message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-	      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-	    }
-	  }
 		
 	@PostMapping("/saveFoundPet")
 	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet,HttpServletRequest req) {
@@ -152,15 +139,15 @@ public class lostAndFoundController {
 		return foundService.getFoundPets();
 	}
 	
-	@ResponseBody
-	@GetMapping("/importFoundPetsToElastic")
-	public  List<FoundPet> importFoundPetsToElastic() {
-		List<FoundPet> list = foundService.getFoundPets();
-		for(FoundPet pet: list) {
-			foundPetkafkaTemplate.send(FOUND_PET_TOPIC,pet);
-		}
-		return foundService.getFoundPets();
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @GetMapping("/importFoundPetsToElastic") public List<FoundPet>
+	 * importFoundPetsToElastic() { List<FoundPet> list =
+	 * foundService.getFoundPets(); for(FoundPet pet: list) {
+	 * foundPetkafkaTemplate.send(FOUND_PET_TOPIC,pet); } return
+	 * foundService.getFoundPets(); }
+	 */
 	
 	@ResponseBody
 	@GetMapping("/getLostPets")
@@ -168,15 +155,14 @@ public class lostAndFoundController {
 		return lostService.getLostPets();
 	}
 	
-	@ResponseBody
-	@GetMapping("/importLostPetsToElastic")
-	public  List<LostPet> importLostPetsToElastic() {
-		List<LostPet> list = lostService.getLostPets();
-		for(LostPet pet: list) {
-			lostPetkafkaTemplate.send(LOST_PET_TOPIC,pet);
-		}
-		return lostService.getLostPets();
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @GetMapping("/importLostPetsToElastic") public List<LostPet>
+	 * importLostPetsToElastic() { List<LostPet> list = lostService.getLostPets();
+	 * for(LostPet pet: list) { lostPetkafkaTemplate.send(LOST_PET_TOPIC,pet); }
+	 * return lostService.getLostPets(); }
+	 */
 	
 	@ResponseBody
 	@GetMapping("/getLostPetById/{id}")
@@ -232,28 +218,14 @@ public class lostAndFoundController {
 		return ResponseEntity.ok("post saved");
 	}
 	
-	@GetMapping("/produce")
-	public String produce(@RequestBody LostPet lostPet) {	
-		System.out.println("produce called");
-		try { 
-			lostPetkafkaTemplate.send(LOST_PET_TOPIC, lostPet); 
-		} catch (Exception e) { // TODO
-			e.printStackTrace(); 
-		}
-		return "produce called";
-	}
 	
-	@GetMapping("/clearLostPets")
-	public String clearLostPets() {	
-		lostService.removeAll();
-		return "removedAll";
-	}
-	
-	@GetMapping("/clearFoundPets")
-	public String clearFoundPets() {	
-		foundService.removeAll();
-		return "removedAll";
-	}
+	/*
+	 * @GetMapping("/clearLostPets") public String clearLostPets() {
+	 * lostService.removeAll(); return "removedAll"; }
+	 * 
+	 * @GetMapping("/clearFoundPets") public String clearFoundPets() {
+	 * foundService.removeAll(); return "removedAll"; }
+	 */
 	
 	/*
 	 * @KafkaListener(topics = TOPIC, groupId = "foo") public void consume(String
