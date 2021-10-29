@@ -51,6 +51,10 @@ public class AuthFilter extends OncePerRequestFilter{
 	    while(headerNames.hasMoreElements()) {
 	        String headerName = (String)headerNames.nextElement();
 	        logger.info("header: " + headerName + ":" + request.getHeader(headerName));
+	        if(request.getHeader(headerName).contains(new StringBuffer("ReactorNetty"))){
+	        	filterChain.doFilter(request, response);
+				return;
+	        }
 	    }
 		logger.info("entered");
 		String token = (String) request.getHeader("Authorization");
@@ -72,7 +76,7 @@ public class AuthFilter extends OncePerRequestFilter{
 		ResponseEntity<String> profileNameEntity = 
 				restTemplate.exchange("http://propets-auth-service/api/auth/getProfileName", HttpMethod.GET, requestObject, String.class);
 		if(responseEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED) || profileNameEntity.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
-			response.addHeader("401", "Unauthorized!");
+			response.sendError(HttpStatus.UNAUTHORIZED.value(),HttpStatus.UNAUTHORIZED.getReasonPhrase());
 			return;
 		}
 		logger.info("response from auth: " + responseEntity.getBody());

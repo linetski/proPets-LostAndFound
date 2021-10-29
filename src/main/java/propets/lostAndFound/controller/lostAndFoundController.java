@@ -1,36 +1,28 @@
 package propets.lostAndFound.controller;
 
 import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+/*import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;*/
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.netflix.client.http.HttpRequest;
-
-import propets.lostAndFound.filters.AuthFilter;
 import propets.lostAndFound.services.FavoritePostService;
 import propets.lostAndFound.services.FoundService;
 import propets.lostAndFound.services.ImmagaService;
@@ -67,15 +59,30 @@ public class lostAndFoundController {
 	ImmagaService immagaService;
 	
 	@Autowired
-    private KafkaTemplate<String, LostPet> lostPetkafkaTemplate;
+	private AmqpTemplate rabbitTemplate;
 	
-	@Autowired
-    private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
+	@Value("${rabbitmq.exchange.lostpet}")
+	private String lostpetExchange;
+	
+	@Value("${rabbitmq.routingkey.lostpet}")
+	private String lostpetRoutingkey;
+	
+	@Value("${rabbitmq.exchange.foundpet}")
+	private String foundpetExchange;
+	
+	@Value("${rabbitmq.routingkey.foundpet}")
+	private String foundpetRoutingkey;
+	
+	//@Autowired
+    //private KafkaTemplate<String, LostPet> lostPetkafkaTemplate;
+	
+	//@Autowired
+    //private KafkaTemplate<String, FoundPet> foundPetkafkaTemplate;
 		
 	@PostMapping("/saveFoundPet")
 	public  ResponseEntity<String> saveFoundAnimal(@RequestBody FoundPet foundPet,HttpServletRequest req) {
 		StringBuilder tagsBuilder = new StringBuilder();
-		String tags = "";
+		String tags = StringUtils.EMPTY;
 		HashSet<String> set = new HashSet<String>();
 		try {
 			for(String url : foundPet.getImageUrls()) {
@@ -96,7 +103,8 @@ public class lostAndFoundController {
 		foundPet.setEmail((String)req.getSession().getAttribute("email"));
 		
 		foundService.saveFoundPet(foundPet);
-		foundPetkafkaTemplate.send(FOUND_PET_TOPIC,foundPet);
+		//foundPetkafkaTemplate.send(FOUND_PET_TOPIC,foundPet);
+		rabbitTemplate.convertAndSend(foundpetExchange, foundpetRoutingkey, foundPet);
 		logger.info("found pet saved: " + foundPet);
 		return ResponseEntity.ok("foundPet saved");
 	}
@@ -128,7 +136,8 @@ public class lostAndFoundController {
 		logger.info(email);
 		lostPet.setEmail(email);
 		lostService.saveLostPet(lostPet);
-		lostPetkafkaTemplate.send(LOST_PET_TOPIC,lostPet);
+		//lostPetkafkaTemplate.send(LOST_PET_TOPIC,lostPet);
+		rabbitTemplate.convertAndSend(lostpetExchange, lostpetRoutingkey, lostPet);
 		logger.info(lostPet.toString());
 		return ResponseEntity.ok("lostPet saved");
 	}
